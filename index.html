@@ -10,9 +10,14 @@
         gtag('config', 'G-SKEK3XF5WP');
     </script>
 
+    <!-- Viewport for mobile scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
             margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent body from scrolling */
         }
 
         .wrapper {
@@ -20,6 +25,8 @@
             z-index: 1;
             display: inline-block;
             width: 100vw;
+            height: 100vh; /* Ensure it takes full viewport height */
+            overflow: hidden;
         }
 
         .hidefooter {
@@ -59,8 +66,28 @@
             display: block;
             background: #ffffff;
             border: none;
-            height: 99vh;
-            width: 99vw;
+            height: 100vh;
+            width: 100vw;
+            transform: scale(1); /* Default zoom for larger screens */
+            transform-origin: top left;
+            overflow: auto; /* Allow both vertical and horizontal scrolling */
+        }
+
+        @media (max-width: 768px) {
+            /* Adjust zoom level based on viewport size */
+            iframe {
+                transform: scale(1.2); /* Zoom in for mobile */
+                height: calc(100vh / 1.2); /* Adjust the iframe height for zoom level */
+                width: calc(100vw / 1.2); /* Ensure scrolling area adapts to zoom */
+            }
+        }
+
+        @media (max-width: 480px) {
+            iframe {
+                transform: scale(1.5); /* Zoom in further for smaller screens */
+                height: calc(100vh / 1.5); /* Adjust iframe height */
+                width: calc(100vw / 1.5); /* Ensure scrolling area adapts to zoom */
+            }
         }
     </style>    
 </head>
