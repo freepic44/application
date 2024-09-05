@@ -33,6 +33,10 @@ cloudinary.config(
     secure=True,
 )
 
+# Display logo only when the user is not logged in
+if not st.session_state.get("authentication_status"):
+    st.image("logo.png", use_column_width=True)  # Add logo here
+
 # Creating the authenticator object
 authenticator = stauth.Authenticate(
     config['credentials'],
@@ -48,10 +52,27 @@ try:
 except LoginError as e:
     st.error(e)
 
+# Creating a new user registration widget
+if not st.session_state.get("authentication_status"):
+    with st.expander("Register User", expanded=False):  # Set expanded to False
+        try:
+            # Provide a unique key for the registration form
+            (email_of_registered_user,
+             username_of_registered_user,
+             name_of_registered_user) = authenticator.register_user(pre_authorization=False, key="register_user_form")
+            if email_of_registered_user:
+                st.success('User registered successfully')
+                # Saving config file after registration
+                with open('config.yaml', 'w', encoding='utf-8') as file:
+                    yaml.dump(config, file, default_flow_style=False)
+        except RegisterError as e:
+            st.error(e)
+
 if st.session_state.get("authentication_status"):
     authenticator.logout()
     st.write(f'Welcome *{st.session_state["name"]}*')
     st.title('AI Image Editor 🪄')
+    st.markdown("(Click on the Button & Scroll to the bottom to upload image)")  # Add subtext here
 
     # App Selection using GIFs
     app_options = {
@@ -283,8 +304,7 @@ if st.session_state.get("authentication_status"):
 
         # App 5: Change Color
         elif selected_app == "Change Color":
-            st.title("Image Item Recoloring with Cloudinary's Generative Recolor")
-
+           
             uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
             if uploaded_file is not None:
@@ -366,18 +386,3 @@ if st.session_state.get("authentication_status"):
 
 else:
     st.error('Please login to use the app.')
-
-# Creating a new user registration widget
-if not st.session_state.get("authentication_status"):
-    with st.expander("Register User", expanded=False):  # Set expanded to False
-        try:
-            (email_of_registered_user,
-             username_of_registered_user,
-             name_of_registered_user) = authenticator.register_user(pre_authorization=False)
-            if email_of_registered_user:
-                st.success('User registered successfully')
-                # Saving config file after registration
-                with open('config.yaml', 'w', encoding='utf-8') as file:
-                    yaml.dump(config, file, default_flow_style=False)
-        except RegisterError as e:
-            st.error(e)
