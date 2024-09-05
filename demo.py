@@ -2,6 +2,12 @@ import yaml
 import streamlit as st
 from yaml.loader import SafeLoader
 import streamlit_authenticator as stauth
+from streamlit_authenticator.utilities import (CredentialsError,
+                                               ForgotError,
+                                               LoginError,
+                                               RegisterError,
+                                               ResetError,
+                                               UpdateError)
 from PIL import Image
 import requests
 import io
@@ -39,7 +45,7 @@ authenticator = stauth.Authenticate(
 # Creating a login widget
 try:
     authenticator.login()
-except stauth.LoginError as e:
+except LoginError as e:
     st.error(e)
 
 if st.session_state.get("authentication_status"):
@@ -361,8 +367,17 @@ if st.session_state.get("authentication_status"):
 else:
     st.error('Please login to use the app.')
 
-# Add this section to the end of the file
+# Creating a new user registration widget
 if not st.session_state.get("authentication_status"):
-    if st.button("Create new account"):
-        # Redirect to registration logic (you may need to implement this)
-        st.write("Redirecting to registration page...")  # Placeholder for actual registration logic
+    with st.expander("Register User", expanded=False):  # Set expanded to False
+        try:
+            (email_of_registered_user,
+             username_of_registered_user,
+             name_of_registered_user) = authenticator.register_user(pre_authorization=False)
+            if email_of_registered_user:
+                st.success('User registered successfully')
+                # Saving config file after registration
+                with open('config.yaml', 'w', encoding='utf-8') as file:
+                    yaml.dump(config, file, default_flow_style=False)
+        except RegisterError as e:
+            st.error(e)
