@@ -29,7 +29,7 @@
           display: block;
           color: rgb(0, 0, 0);
         }
-    
+
         iframe {
           display: block;
           background: #ffffff;
@@ -38,6 +38,7 @@
           width: 100vw;
           transform: scale(1); /* Default zoom for larger screens */
           transform-origin: top left;
+          overflow: auto; /* Allow both vertical and horizontal scrolling */
         }
 
         @media (max-width: 768px) {
@@ -45,6 +46,7 @@
             iframe {
                 transform: scale(1.2); /* Zoom in for mobile */
                 height: calc(100vh / 1.2); /* Adjust the iframe height for zoom level */
+                width: calc(100vw / 1.2); /* Ensure scrolling area adapts to zoom */
             }
         }
         
@@ -52,6 +54,7 @@
             iframe {
                 transform: scale(1.5); /* Zoom in further for smaller screens */
                 height: calc(100vh / 1.5); /* Adjust iframe height */
+                width: calc(100vw / 1.5); /* Ensure scrolling area adapts to zoom */
             }
         }
     </style>    
@@ -59,7 +62,8 @@
 <body>
   <div class="wrapper">
     <div class="hidefooter"></div>
-    <iframe src="https://application-hqto5qphcotktqnxfetpol.streamlit.app/?embed=true">
+    <iframe src="https://application-hqto5qphcotktqnxfetpol.streamlit.app/?embed=true" scrolling="yes">
+        <p>Your browser doesn't support iframes</p>
     </iframe>
   </div>
 </body>
