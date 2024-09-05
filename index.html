@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
           margin: 0;
+          padding: 0;
+          overflow: hidden; /* Prevent body from scrolling */
         }
 
         .wrapper {
@@ -11,11 +14,13 @@
           z-index: 1;
           display: inline-block;
           width: 100vw;
+          height: 100vh; /* Ensure it takes full viewport height */
+          overflow: hidden;
         }
 
         .hidefooter {
           position: absolute;
-          width:  100%; 
+          width: 100%; 
           height: 35px;
           background: rgb(242,240,246);
           right: 0px;
@@ -29,18 +34,33 @@
           display: block;
           background: #ffffff;
           border: none;
-          height: 99vh;
-          width: 99vw;
+          height: 100vh;
+          width: 100vw;
+          transform: scale(1); /* Default zoom for larger screens */
+          transform-origin: top left;
         }
-        </style>    
 
+        @media (max-width: 768px) {
+            /* Adjust zoom level based on viewport size */
+            iframe {
+                transform: scale(1.2); /* Zoom in for mobile */
+                height: calc(100vh / 1.2); /* Adjust the iframe height for zoom level */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            iframe {
+                transform: scale(1.5); /* Zoom in further for smaller screens */
+                height: calc(100vh / 1.5); /* Adjust iframe height */
+            }
+        }
+    </style>    
 </head>
 <body>
   <div class="wrapper">
     <div class="hidefooter"></div>
     <iframe src="https://application-hqto5qphcotktqnxfetpol.streamlit.app/?embed=true">
-        <p>Your browser doesn't support iframes</p>
     </iframe>
-    </div>
+  </div>
 </body>
 </html>
