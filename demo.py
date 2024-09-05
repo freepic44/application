@@ -10,16 +10,20 @@ import os
 import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
+from dotenv import load_dotenv
 
 # Loading config file
 with open('config.yaml', 'r', encoding='utf-8') as file:
     config = yaml.load(file, Loader=SafeLoader)
 
-# Configure Cloudinary
+# Load environment variables from .env file
+load_dotenv()
+
+# Configure Cloudinary using environment variables
 cloudinary.config(
-    cloud_name="dx6luakep",
-    api_key="661933616146216",
-    api_secret="bu-WDRjHvteqWeowPkVOwYwpGLs",
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
     secure=True,
 )
 
